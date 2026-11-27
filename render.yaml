@@ -1,0 +1,35 @@
+# Render Blueprint for FD Optimization Program
+# Configures persistent SQLite disk storage and automated 2:00 AM IST daily cron refresh
+services:
+  # 1. Main Production Web Service with Attached Persistent SQLite Disk
+  - type: web
+    name: fd-optimization-service
+    runtime: node
+    plan: starter
+    region: singapore # Closest low-latency region to India
+    buildCommand: npm install
+    startCommand: node server.js
+    disk:
+      name: sqlite_data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: /var/data/rates.db
+      - key: PORT
+        value: 10000
+
+  # 2. Automated Daily 2:00 AM IST Cron Job
+  - type: cron
+    name: daily-rbi-rate-sync
+    runtime: node
+    plan: starter
+    region: singapore
+    schedule: "30 20 * * *" # 20:30 UTC = 2:00 AM IST every single morning
+    buildCommand: npm install
+    startCommand: node sync_rates.js
+    envVars:
+      - key: DB_PATH
+        value: /var/data/rates.db
