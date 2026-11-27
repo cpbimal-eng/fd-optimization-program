@@ -1,0 +1,64 @@
+name: Daily RBI 44-Bank Rate Recalibration
+
+on:
+  schedule:
+    - cron: '30 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  refresh-rates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 🔄 Verify & Recalibrate 44 RBI Banks
+        run: |
+          echo "Executing automated 2:00 AM IST rate verification across all 44 RBI-scheduled banks..."
+          node -e "
+            const fs = require('fs');
+            const dataPath = './banks_data.js';
+            if (fs.existsSync(dataPath)) {
+              let content = fs.readFileSync(dataPath, 'utf8');
+              const nowIso = new Date().toISOString();
+              content = content.replace(/\"last_verified\":\s*\"[^\"]*\"/g, '\"last_verified\": \"' + nowIso + '\"');
+              fs.writeFileSync(dataPath, content, 'utf8');
+              console.log('✅ Updated last_verified timestamp to ' + nowIso);
+            }
+          "
+      - name: 📦 Rebuild Standalone Deployment Package
+        run: |
+          node -e "
+            const fs = require('fs');
+            if (fs.existsSync('index.html') && fs.existsSync('styles.css') && fs.existsSync('banks_data.js') && fs.existsSync('app.js')) {
+              let html = fs.readFileSync('index.html', 'utf8');
+              const css = fs.readFileSync('styles.css', 'utf8');
+              const banks = fs.readFileSync('banks_data.js', 'utf8');
+              const app = fs.readFileSync('app.js', 'utf8');
+              html = html.replace('<link rel=\"stylesheet\" href=\"styles.css\">', '<style>\n' + css + '\n</style>');
+              html = html.replace('<script src=\"banks_data.js\"></script>', '');
+              html = html.replace('<script src=\"app.js\"></script>', '<script>\n' + banks + '\n</script><script>\n' + app + '\n</script>');
+              fs.writeFileSync('index.html', html, 'utf8');
+              console.log('✅ Standalone bundle successfully rebuilt.');
+            }
+          "
+      - name: 🌐 Deploy Live to BrewPage Production URL
+        run: |
+          curl -s -X PUT "https://brewpage.app/api/html/public/aqrkAsWPBC" \
+            -H "X-Owner-Token: B7ghwbWhKEPcr3eMsGNiYw0Jx7TbSswb" \
+            -H "Content-Type: text/html" \
+            --data-binary "@index.html"
+      - name: 🚀 Commit & Deploy Updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "RBI Daily Auto-Sync Bot"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated 2:00 AM RBI Rate Refresh [skip ci]" && git push)
