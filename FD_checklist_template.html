@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FD checklist</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1E293B;
+    background: #ffffff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page {
+    width: 297mm;
+    height: 210mm;
+    padding: 20pt 26pt 24pt 26pt;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .header-title {
+    font-size: 16.5pt;
+    font-weight: 700;
+    color: #16325C;
+    line-height: 1.15;
+  }
+  .header-subtitle {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #64748B;
+    margin-top: 2px;
+  }
+  .pill-banner {
+    display: inline-block;
+    background: #EAF5EA;
+    border: 1px solid #C3E6CB;
+    border-radius: 9999px;
+    padding: 2.5px 11px;
+    color: #1E6B38;
+    font-size: 8pt;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 8px;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #16325C;
+  }
+  .section-meta {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1E293B;
+  }
+  table.fd-table {
+    width: 790pt;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 8px;
+  }
+  table.fd-table th, table.fd-table td {
+    border: 0.5pt solid #CBD5E1;
+    padding: 3.5pt 5.5pt;
+    vertical-align: middle;
+  }
+  table.fd-table th {
+    color: #ffffff;
+    font-size: 8pt;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  table.fd-table th.sec1 { background-color: #964215; }
+  table.fd-table th.sec2 { background-color: #174871; }
+  table.fd-table th.sec3 { background-color: #8B1E22; }
+  
+  .col-fdno { width: 52pt; text-align: center; }
+  .col-bank { width: 120pt; text-align: left; }
+  .col-amt { width: 75pt; text-align: center; font-weight: 700; }
+  .col-start { width: 72pt; text-align: center; }
+  .col-mat { width: 78pt; text-align: center; }
+  .col-action { width: 273pt; text-align: left; }
+  .col-benefit { width: 120pt; text-align: right; }
+  
+  .cell-bold { font-weight: 700; font-size: 8pt; }
+  .cell-muted { color: #64748B; font-size: 7pt; font-weight: 400; margin-top: 1pt; }
+  .cell-text { font-size: 7.5pt; }
+  .cell-green { color: #1E7E34; font-weight: 700; font-size: 8pt; }
+  .cell-navy-bold { color: #16325C; font-weight: 700; font-size: 8pt; }
+  
+  tr.just-row td {
+    background-color: #F8F9FA;
+    font-size: 7pt;
+    color: #1E293B;
+    line-height: 1.3;
+    text-align: left;
+    padding: 3pt 5.5pt;
+  }
+  
+  .notes-box {
+    width: 790pt;
+    background: #F8FAFC;
+    border: 0.5pt solid #CBD5E1;
+    border-left: 3.5pt solid #16325C;
+    border-radius: 3px;
+    padding: 9pt 12pt;
+    margin-top: 6pt;
+  }
+  .notes-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #16325C;
+    margin-bottom: 6pt;
+  }
+  table.notes-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table.notes-table td {
+    padding: 3pt 0;
+    vertical-align: top;
+    font-size: 7.5pt;
+    line-height: 1.35;
+    border: none;
+  }
+  table.notes-table td.note-label {
+    width: 155pt;
+    font-weight: 700;
+    color: #1E293B;
+  }
+  table.notes-table td.note-desc {
+    color: #334155;
+  }
+  
+  .footer {
+    position: absolute;
+    left: 26pt;
+    right: 26pt;
+    bottom: 14pt;
+    border-top: 0.5pt solid #CBD5E1;
+    padding-top: 4pt;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7pt;
+    color: #64748B;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 OF 2 -->
+<div class="page">
+  <div class="header-title">FD Optimization Program — Senior Citizen FD Action Checklist</div>
+  <div class="header-subtitle">Which FDs to Move & Where (RBI-Scheduled Banks & DICGC Safety Protection)</div>
+  <div class="pill-banner">As of 24 Nov 2026 | 1 Overdue Matured FD (₹27,000) + 10 Break & Move FDs (₹33,56,000 Principal, +₹57,127 Est. Pre-Tax Gain) + 1 Verify-First Item</div>
+  
+  <!-- SECTION 1 -->
+  <div class="section-header">
+    <div class="section-title">1. Reinvest Immediately — 1 Already-Matured FD</div>
+    <div class="section-meta">Total Principal: ₹27,000</div>
+  </div>
+  <table class="fd-table">
+    <thead>
+      <tr>
+        <th class="col-fdno sec1">FD No.</th>
+        <th class="col-bank sec1">Existing Bank</th>
+        <th class="col-amt sec1">FD Amount</th>
+        <th class="col-start sec1">Start Date</th>
+        <th class="col-mat sec1">Maturity Date</th>
+        <th class="col-action sec1">Move To Bank (DICGC-Safe)</th>
+        <th class="col-benefit sec1">New Int. % & Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-16</div><div class="cell-muted">Row 27</div></td>
+        <td class="col-bank"><div class="cell-bold">HDFC</div><div class="cell-muted">Current: 7.25% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹27,000</td>
+        <td class="col-start"><div class="cell-text">2025-01-04</div></td>
+        <td class="col-mat"><div class="cell-text">2026-07-04</div></td>
+        <td class="col-action"><div class="cell-bold">Utkarsh Small Finance Bank (Maria Single)</div><div class="cell-muted">Tenure: 666 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹4,499</div><div class="cell-muted">(+₹2,970 vs 3% SB)</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Matured on 2026-07-04 (143 days overdue), zero premature penalty applies; currently earns idle savings interest (~3.0%). Reinvesting into Utkarsh SFB at 8.50% (666 days) yields +₹2,970 net gain over savings interest, keeping Maria Single's Utkarsh balance at ₹4,97,000 (safely within the ₹5,00,000 DICGC insurance limit).</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- SECTION 2 (TOP 6 ENTRIES) -->
+  <div class="section-header" style="margin-top: 6pt;">
+    <div class="section-title">2. Break & Move Now — 10 Confirmed Bank FDs (Part 1: Top 6 Highest-Impact Switches)</div>
+    <div class="section-meta">Principal: ₹20,56,000 | Est. Pre-Tax Gain: +₹49,602</div>
+  </div>
+  <table class="fd-table">
+    <thead>
+      <tr>
+        <th class="col-fdno sec2">FD No.</th>
+        <th class="col-bank sec2">Existing Bank</th>
+        <th class="col-amt sec2">FD Amount</th>
+        <th class="col-start sec2">Start Date</th>
+        <th class="col-mat sec2">Maturity Date</th>
+        <th class="col-action sec2">Move To Bank (DICGC-Safe Split)</th>
+        <th class="col-benefit sec2">New Int. % & Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-32</div><div class="cell-muted">Row 52</div></td>
+        <td class="col-bank"><div class="cell-bold">DCB Maria & Bimal</div><div class="cell-muted">Current: 8.00% | Pen: 0.5%</div></td>
+        <td class="col-amt">₹6,00,000</td>
+        <td class="col-start"><div class="cell-text">2026-06-15</div></td>
+        <td class="col-mat"><div class="cell-text">2031-06-16*</div></td>
+        <td class="col-action"><div class="cell-bold">Unity SFB ₹5L (Maria Single, 8.50%) + Ujjivan SFB ₹1L (Maria Single, 8.60%)</div><div class="cell-muted">Tenure: 501d / 3y 1d–3y 6m</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.52% avg</div><div class="cell-green">Gain: +₹18,927</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Only 162 days elapsed with 1,665 days (4.56 yrs) remaining. DCB's 0.50% penalty costs just ₹1,326, recovered within months by the +0.50% to +0.60% rate upgrade over 4.5+ years for +₹18,927 net gain. Splitting ₹5L to Unity SFB and ₹1L to Ujjivan SFB eliminates the ₹6L single-FD DICGC insurance breach.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-31</div><div class="cell-muted">Row 51</div></td>
+        <td class="col-bank"><div class="cell-bold">DCB Maria & Bimal</div><div class="cell-muted">Current: 8.00% | Pen: 0.5%</div></td>
+        <td class="col-amt">₹4,00,000</td>
+        <td class="col-start"><div class="cell-text">2026-06-02</div></td>
+        <td class="col-mat"><div class="cell-text">2031-07-02*</div></td>
+        <td class="col-action"><div class="cell-bold">Ujjivan Small Finance Bank (Maria Single — fresh ₹5L cover)</div><div class="cell-muted">Tenure: 3y 1d – 3y 6m</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.60%</div><div class="cell-green">Gain: +₹15,031</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Longest horizon in portfolio (1,681 days / 4.61 yrs remaining). Paying DCB's small 0.50% penalty (₹959) captures Ujjivan's top-ranked 8.60% rate (+0.60% spread) for +₹15,031 net gain under Maria Single's fresh ₹5L DICGC capacity (combined ₹5L with ₹1L from FD-32).</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-14</div><div class="cell-muted">Row 23</div></td>
+        <td class="col-bank"><div class="cell-bold">Yes Maria</div><div class="cell-muted">Current: 7.75% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹2,20,000</td>
+        <td class="col-start"><div class="cell-text">2026-01-13</div></td>
+        <td class="col-mat"><div class="cell-text">2030-01-13*</div></td>
+        <td class="col-action"><div class="cell-bold">Utkarsh Small Finance Bank (Maria Single)</div><div class="cell-muted">Tenure: 666 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹7,002</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: YES Bank waives premature penalty (0.0%) for Senior Citizens on FDs booked from 16 May 2022 onward (₹0 exit penalty). Upgrading from 7.75% to Utkarsh SFB's 8.50% (+0.75% spread) across 1,146 remaining days (3.14 yrs) yields a risk-free +₹7,002 net pre-tax gain inside Maria Single's ₹5L DICGC limit.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-28</div><div class="cell-muted">Row 47</div></td>
+        <td class="col-bank"><div class="cell-bold">Bandhan Maria Joint</div><div class="cell-muted">Current: 7.70% | Pen: 1.0%</div></td>
+        <td class="col-amt">₹3,50,000</td>
+        <td class="col-start"><div class="cell-text">2026-01-24</div></td>
+        <td class="col-mat"><div class="cell-text">2028-12-25</div></td>
+        <td class="col-action"><div class="cell-bold">Utkarsh Small Finance Bank (Maria & Bimal Joint)</div><div class="cell-muted">Tenure: 666 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹3,660</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Despite Bandhan's 1.0% penalty costing ₹3,007 on 304 elapsed days, the +0.80% rate jump (7.70% to 8.50%) over 762 remaining days (2.09 yrs) yields +₹3,660 net gain after penalty. Booking under Maria & Bimal Joint (Maria 1st holder) qualifies for Senior Citizen rates under a distinct ₹5L DICGC capacity.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-34</div><div class="cell-muted">Row 57</div></td>
+        <td class="col-bank"><div class="cell-bold">RBL Maria Single</div><div class="cell-muted">Current: 8.00% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹3,00,000</td>
+        <td class="col-start"><div class="cell-text">2025-05-09</div></td>
+        <td class="col-mat"><div class="cell-text">2028-05-09</div></td>
+        <td class="col-action"><div class="cell-bold">Unity Small Finance Bank (Maria & Bimal Joint)</div><div class="cell-muted">Tenure: 501 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹2,742</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: RBL Bank charges 0.0% premature penalty for Senior Citizens (60 to <70 yrs); exiting incurs ₹0 cost. Moving ₹3,00,000 from 8.00% to Unity SFB's 8.50% (+0.50% spread) for 532 remaining days (1.46 yrs) delivers +₹2,742 net gain and de-concentrates RBL Maria Single exposure toward the ₹5L limit.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-07</div><div class="cell-muted">Row 13</div></td>
+        <td class="col-bank"><div class="cell-bold">SBI</div><div class="cell-muted">Current: 6.95% | Pen: 0.5%</div></td>
+        <td class="col-amt">₹1,36,000</td>
+        <td class="col-start"><div class="cell-text">2026-09-19</div></td>
+        <td class="col-mat"><div class="cell-text">2027-12-07</div></td>
+        <td class="col-action"><div class="cell-bold">Utkarsh Small Finance Bank (Maria & Bimal Joint)</div><div class="cell-muted">Tenure: 666 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹2,239</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Booked only 66 days ago at low 6.95%; SBI's 0.50% penalty (for FDs ≤ ₹5L) costs only ₹117. Moving to Utkarsh SFB at 8.50% captures a huge +1.55% spread across 378 remaining days for +₹2,239 net gain, keeping Utkarsh Joint at ₹4,86,000 (within ₹5L DICGC).</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="footer">
+    <div>FD Optimization Program — Senior Citizen FD Action Checklist (24 Nov 2026) | Source: RBI 44-Bank Directory</div>
+    <div>Page 1 of 2</div>
+  </div>
+</div>
+
+<!-- PAGE 2 OF 2 -->
+<div class="page">
+  <!-- SECTION 2 CONTINUED (REMAINING 4 ENTRIES) -->
+  <div class="section-header">
+    <div class="section-title">2. Break & Move Now (Part 2: Remaining 4 Confirmed Switches)</div>
+    <div class="section-meta">Principal: ₹13,00,000 | Est. Pre-Tax Gain: +₹7,525</div>
+  </div>
+  <table class="fd-table">
+    <thead>
+      <tr>
+        <th class="col-fdno sec2">FD No.</th>
+        <th class="col-bank sec2">Existing Bank</th>
+        <th class="col-amt sec2">FD Amount</th>
+        <th class="col-start sec2">Start Date</th>
+        <th class="col-mat sec2">Maturity Date</th>
+        <th class="col-action sec2">Move To Bank (DICGC-Safe Split)</th>
+        <th class="col-benefit sec2">New Int. % & Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-26</div><div class="cell-muted">Row 42</div></td>
+        <td class="col-bank"><div class="cell-bold">Suroday</div><div class="cell-muted">Current: 8.10% | Pen: 1.0%</div></td>
+        <td class="col-amt">₹4,00,000</td>
+        <td class="col-start"><div class="cell-text">2026-06-25</div></td>
+        <td class="col-mat"><div class="cell-text">2028-12-25</div></td>
+        <td class="col-action"><div class="cell-bold">Suryoday SFB (Rebook Maria & Bimal Joint)</div><div class="cell-muted">Tenure: Select 8.50% slab</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹2,061</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Held under Bimal (non-senior) at 8.10% with 152 days elapsed (1.0% penalty = ₹1,652). Rebooking under Maria & Bimal Joint (Maria 1st holder) unlocks Suryoday's 8.50% Senior Citizen rate (+0.40% spread) over 762 remaining days for +₹2,061 net gain inside ₹5L DICGC insurance cover.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-35</div><div class="cell-muted">Row 58</div></td>
+        <td class="col-bank"><div class="cell-bold">RBL Maria Single</div><div class="cell-muted">Current: 8.00% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹2,00,000</td>
+        <td class="col-start"><div class="cell-text">2025-06-14</div></td>
+        <td class="col-mat"><div class="cell-text">2028-06-14</div></td>
+        <td class="col-action"><div class="cell-bold">Unity Small Finance Bank (Maria & Bimal Joint)</div><div class="cell-muted">Tenure: 501 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹1,952</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Zero premature penalty (0.0%) for Senior Citizens at RBL Bank means ₹0 exit penalty after 528 elapsed days. Shifting ₹2,00,000 from 8.00% to Unity SFB's 8.50% (+0.50% spread) over 568 remaining days earns +₹1,952 net gain while completing Unity Joint's ₹5,00,000 DICGC-insured capacity.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-25</div><div class="cell-muted">Row 39</div></td>
+        <td class="col-bank"><div class="cell-bold">INDUSIND BANK - Maria</div><div class="cell-muted">Current: 7.50% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹2,50,000</td>
+        <td class="col-start"><div class="cell-text">2026-01-15</div></td>
+        <td class="col-mat"><div class="cell-text">2027-07-15</div></td>
+        <td class="col-action"><div class="cell-bold">Utkarsh Small Finance Bank (Maria Single)</div><div class="cell-muted">Tenure: 666 Days</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹1,777</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: IndusInd Bank waives premature penalty (0.0%) for Resident Senior Citizens on callable FDs booked ≥ 12 months (original tenure 18 months). Upgrading from 7.50% to Utkarsh SFB's 8.50% (+1.00% spread) with ₹0 penalty earns +₹1,777 in 233 remaining days and trims IndusInd Maria exposure below ₹5L DICGC.</td>
+      </tr>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-17</div><div class="cell-muted">Row 29</div></td>
+        <td class="col-bank"><div class="cell-bold">Ujjivan Maria Joint</div><div class="cell-muted">Current: 8.25% | Pen: 0.0%</div></td>
+        <td class="col-amt">₹5,00,000</td>
+        <td class="col-start"><div class="cell-text">2025-04-24</div></td>
+        <td class="col-mat"><div class="cell-text">2028-01-09</div></td>
+        <td class="col-action"><div class="cell-bold">Suryoday Small Finance Bank (Maria Single)</div><div class="cell-muted">Tenure: Select 8.50% slab</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.50%</div><div class="cell-green">Gain: +₹1,735</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Held for 579 days (> 6 months), so Ujjivan SFB charges 0.0% premature penalty. Moving ₹5,00,000 from 8.25% to Suryoday SFB (Maria Single, 8.50%) gains +₹1,735 net over 411 remaining days and reduces Ujjivan Maria Joint's over-concentrated ₹11.25L exposure (well above ₹5L DICGC) by ₹5L.</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- SECTION 3 -->
+  <div class="section-header" style="margin-top: 6pt;">
+    <div class="section-title">3. Verify Before Moving — 1 Special Deposit (Likely SCSS)</div>
+    <div class="section-meta">Principal: ₹30,00,000</div>
+  </div>
+  <table class="fd-table">
+    <thead>
+      <tr>
+        <th class="col-fdno sec3">FD No.</th>
+        <th class="col-bank sec3">Existing Bank</th>
+        <th class="col-amt sec3">FD Amount</th>
+        <th class="col-start sec3">Start Date</th>
+        <th class="col-mat sec3">Maturity Date</th>
+        <th class="col-action sec3">Recommended Action</th>
+        <th class="col-benefit sec3">Rate & Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-fdno"><div class="cell-bold">FD-08</div><div class="cell-muted">Row 14</div></td>
+        <td class="col-bank"><div class="cell-bold">SBI</div><div class="cell-muted">Current: 8.20%</div></td>
+        <td class="col-amt">₹30,00,000</td>
+        <td class="col-start"><div class="cell-text">2025-10-08</div></td>
+        <td class="col-mat"><div class="cell-text">2030-10-08*</div></td>
+        <td class="col-action"><div class="cell-bold" style="color: #1E293B;">Verify if SCSS before closing.</div><div class="cell-muted" style="color: #475569; font-size: 7.5pt; margin-top: 1.5pt;">Do NOT break if SCSS (1.5% penalty = ₹45,000 loss). If regular SBI FD, moving yields +₹19,021 @8.60% (or +₹1,867 @8.50%).</div></td>
+        <td class="col-benefit"><div class="cell-bold">8.20%</div><div class="cell-navy-bold">Save ₹45,000</div><div class="cell-muted">(Keep if SCSS)</div></td>
+      </tr>
+      <tr class="just-row">
+        <td colspan="7">Justification: Exact ₹30,00,000 principal, 5-year tenure (2025-10-08 to 2030-10-08), and 8.20% interest rate match the sovereign Senior Citizens Savings Scheme (SCSS) cap and rate. Premature closure between 1 and 2 years incurs a mandatory 1.5% principal penalty (₹45,000 loss), so keeping it saves ₹45,000 and preserves sovereign backing.</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- QUICK NOTES CARD -->
+  <div class="notes-box">
+    <div class="notes-title">Quick Notes & Portfolio Rules</div>
+    <table class="notes-table">
+      <tr>
+        <td class="note-label">1. FD Numbers:</td>
+        <td class="note-desc">Sequential portfolio IDs and exact spreadsheet row numbers from My FD portfolio.xlsx (e.g., FD-32, Row 52) to match your records directly.</td>
+      </tr>
+      <tr>
+        <td class="note-label">2. Maturity Dates (*):</td>
+        <td class="note-desc">Dates marked with * had 1930/1931 year typos in the source sheet and are corrected to 2030/2031.</td>
+      </tr>
+      <tr>
+        <td class="note-label">3. All Other 30 Entries:</td>
+        <td class="note-desc">Retain until natural maturity — breaking them either incurs net penalty losses or yields under ₹1,500 hurdle (note: ICICI FD-06 for ₹11,773 matures naturally; SBI Locker FD, SBI Bond, and Sub Treasury deposit are excluded from breaking).</td>
+      </tr>
+      <tr>
+        <td class="note-label">4. DICGC Safety & Eligibility:</td>
+        <td class="note-desc">All target allocations (Ujjivan SFB 8.60%, Unity SFB 8.50%, Utkarsh SFB 8.50%, Suryoday SFB 8.50%; zero new ESAF deposits) strictly cap principal ≤ ₹5,00,000 per unique ownership capacity (Maria Single or Maria & Bimal Joint with Maria as 1st holder for Senior Citizen rates).</td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="footer">
+    <div>FD Optimization Program — Senior Citizen FD Action Checklist (24 Nov 2026) | Source: RBI 44-Bank Directory</div>
+    <div>Page 2 of 2</div>
+  </div>
+</div>
+
+</body>
+</html>

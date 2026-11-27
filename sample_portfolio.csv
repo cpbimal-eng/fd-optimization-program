@@ -1,0 +1,68 @@
+﻿COMPANY NAME,TYPE,AMOUNT,INT %,Start Date,MATURITY DATE,Maturity Status,Deposit First Name
+ICICI,ACCOUNT,42559,0,,,,
+ICICI,DEPOSIT,250000,6.3,2023-06-02,2027-12-02,On Going,Bimal
+ICICI,DEPOSIT,70000,6.3,2026-05-14,2027-11-14,On Going,Bimal
+ICICI,DEPOSIT,61890,6.3,2023-07-20,2028-01-20,On Going,Bimal
+ICICI,DEPOSIT,37135,6.3,2023-07-25,2028-01-25,On Going,Bimal
+ICICI,DEPOSIT,42559,6.25,2025-11-12,2027-11-12,On Going,Bimal
+ICICI,DEPOSIT,11773,6.85,2023-11-26,2026-11-26,Maturing in 5 Day(s),Bimal
+KANNUR COOP URBAN,ACCOUNT,3000,0,,,,
+KERALA BANK,ACCOUNT,1000,0,,,,
+POST OFFICE KANNUR,ACCOUNT,500,0,,,,
+SBI,ACCOUNT,29000,0,,,,
+SBI,DEPOSIT,136000,6.95,2026-09-19,2027-12-07,On Going,Maria
+SBI,DEPOSIT,3000000,8.2,2025-10-08,2030-10-08,On Going,Maria
+SBI,DEPOSIT,18000,6.25,,2027-04-19,Locker,
+SBI,BOND,2000000,8.05,2026-04-28,1933-04-28,,
+SUB TREASURY KANNUR,ACCOUNT,1700,0,,,,
+SUB TREASURY KANNUR,DEPOSIT,75000,8.5,2018-03-08,2028-03-08,On Going,Maria
+TSCB,ACCOUNT,350,0,,,,
+YES Maria,ACCOUNT,21000,0,,,,
+Yes Maria,Deposit,200000,8.25,2025-05-10,2028-05-10,On Going,Maria
+Yes Maria,Deposit,100000,8.25,2025-05-13,2028-05-13,On Going,Maria
+Yes Maria,Deposit,220000,7.75,2026-01-13,2030-01-13,On Going,Maria
+Yes Maria,Deposit,200000,8.25,2025-06-01,2028-06-10,On Going,Maria
+Yes Bimal,ACCOUNT,26000,0,,,,
+HDFC,ACCOUNT,26000,0,,,,
+HDFC,DEPOSIT,27000,7.25,2025-01-04,2026-07-04,Matured,Maria
+Ujjivan Maria Joint,ACCOUNT,2800,0,,,,
+Ujjivan Maria Joint,Deposit,500000,8.25,2025-04-24,2028-01-09,On Going,Maria
+Ujjivan Maria Joint,Deposit,100000,8.25,2025-04-24,2028-01-09,On Going,Maria
+Ujjivan Maria Joint,Deposit,100000,8.25,2025-05-01,2028-01-16,On Going,Maria
+Ujjivan Maria Joint,Deposit,100000,8.25,2025-06-17,2028-03-28,On Going,Maria
+Ujjivan Maria Joint,Deposit,100000,7.95,2026-01-15,2028-01-15,On Going,Maria
+Ujjivan Maria Joint,Deposit,100000,8.3,2026-08-15,2028-08-15,On Going,Maria
+Ujjivan Maria Joint,Deposit,125000,8.6,2026-11-11,2030-05-11,On Going,Maria
+INDUSIND BANK - Bimal,ACCOUNT,5000,0,,,,
+INDUSIND BANK - Maria,ACCOUNT,40000,0,,,,
+INDUSIND BANK - Maria,DEPOSIT,310000,8,2025-06-06,2027-06-06,On Going,Maria
+INDUSIND BANK - Maria,DEPOSIT,250000,7.5,2026-01-15,2027-07-15,On Going,Maria
+ZERODHA Bimal,DEMAT,242000,0,,,,
+Zerodha Maria,DEMAT,20000,0,,,,
+Suroday,DEPOSIT,400000,8.1,2026-06-25,2028-12-25,On Going,Bimal
+US Dollars 200,,9000,0,,,,
+IDFC First Bank - Bimal,ACCOUNT,14000,0,,,,
+Bandhan Maria Joint,ACCOUNT,36000,0,,,,
+Bandhan Maria Joint,Deposit,150000,8.5,2025-04-30,2027-01-31,On Going,Maria
+Bandhan Maria Joint,Deposit,350000,7.7,2026-01-24,2028-12-25,On Going,Maria
+DCB Maria & Bimal,ACCOUNT,27000,0,,,,
+DCB Maria & Bimal,Deposit,200000,8.35,2025-04-24,2028-05-24,On Going,DCB Maria & Bimal
+DCB Maria & Bimal,Deposit,101000,8.35,2025-04-25,2028-05-25,On Going,DCB Maria & Bimal
+DCB Maria & Bimal,Deposit,400000,8,2026-06-02,2031-07-02,On Going,DCB Maria & Bimal
+DCB Maria & Bimal,Deposit,600000,8,2026-06-15,2031-06-16,On Going,DCB Maria & Bimal
+DCB Bimal Single,ACCOUNT,27000,0,,,,
+RBL Bimal Single,ACCOUNT,10000,0,,,,Bimal
+RBL Maria Single,ACCOUNT,44000,0,,,,
+RBL Maria Single,Deposit,100000,8,2025-05-06,2028-05-06,On Going,Maria
+RBL Maria Single,Deposit,300000,8,2025-05-09,2028-05-09,On Going,Maria
+RBL Maria Single,Deposit,200000,8,2025-06-14,2028-06-14,On Going,Maria
+RBL Maria Single,Deposit,100000,8,2025-06-14,2028-06-14,On Going,Maria
+RBL Maria Single,Deposit,100000,8,2025-06-02,2028-06-02,On Going,Maria
+ESAF Bimal Joint,ACCOUNT,27000,0,,,,
+ESAF Bimal Joint,Deposit,200000,7.95,2025-04-05,2027-09-10,On Going,Bimal
+ESAF Maria Joint,ACCOUNT,27000,0,,,,
+ESAF Maria Joint,Deposit,450000,7.95,2025-05-05,2027-10-22,On Going,Maria
+AU Maria Joint,ACCOUNT,15000,0,,,,
+AU Maria Joint,Deposit,500000,8,2025-05-27,2028-05-27,On Going,Maria
+AU Maria Joint,Deposit,100000,8,2025-05-27,2028-05-27,On Going,Maria
+AU Maria Joint,Deposit,100000,8,2025-05-27,2028-05-27,On Going,Maria

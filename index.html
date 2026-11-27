@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FD Optimization Program - RBI & DICGC Compliant</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- SheetJS for local Excel parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- html2pdf for client-side PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- HERO BANNER -->
+  <header class="header-hero">
+    <div class="hero-top-row">
+      <div class="hero-branding">
+        <div class="app-logo-badge">
+          <img src="logo.png" alt="Company Logo" class="app-logo-img">
+        </div>
+        <div class="hero-title-group">
+          <h1 class="main-title">FD Optimization Program</h1>
+          <p class="hero-subtitle">Intelligent Fixed Deposit Portfolio Optimization Engine under RBI-Scheduled Commercial Banks & DICGC ₹5 Lakh Insurance Protection</p>
+        </div>
+      </div>
+      <div class="hero-badges">
+        <span class="badge-tag">🏛️ 44 RBI Banks</span>
+        <span class="badge-tag">🛡️ DICGC ₹5L Cap</span>
+        <span class="badge-tag">⚡ Automated PDF Engine</span>
+        <button type="button" class="badge-tag" id="btnOpenDisclaimer" style="border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.18); cursor: pointer; color: #FFFFFF; font-weight: 700; transition: all 0.2s ease;">⚖️ Disclaimer</button>
+        <button type="button" class="badge-tag" id="btnWipeSession" style="border: 1px solid rgba(248,113,113,0.5); background: rgba(239,68,68,0.25); cursor: pointer; color: #FFFFFF; font-weight: 700; transition: all 0.2s ease;">🔒 Reset / Wipe Session</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- DYNAMIC BACKGROUND PROCESS PROGRESS LINE / BAR -->
+  <div id="globalProgressContainer" class="progress-container" style="display: none;">
+    <div class="progress-top-info">
+      <div class="progress-status-box">
+        <span class="progress-spinner-ring"></span>
+        <span id="globalProgressTitle" class="progress-status-title">Processing Portfolio...</span>
+      </div>
+      <span id="globalProgressPercent" class="progress-percentage-val">0%</span>
+    </div>
+    <div class="progress-track-bg">
+      <div id="globalProgressBarLine" class="progress-bar-moving-line" style="width: 0%;"></div>
+    </div>
+    <div id="globalProgressDetail" class="progress-sub-detail">Evaluating rates across 44 RBI-scheduled banks...</div>
+  </div>
+
+  <!-- FORM: CUSTOMER PROFILE & FD TYPE -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">👤 Customer Profile & Investor Classification</div>
+        <div class="card-subtitle">Select the customer FD category and provide Date of Birth to calibrate rate slabs and regulatory logic</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <!-- Drop-down list -->
+      <div class="form-group">
+        <label class="form-label" for="fdCategorySelect">FD Category / Investor Type <span class="req">*</span></label>
+        <select id="fdCategorySelect" class="form-select">
+          <option value="senior citizen FD" selected>senior citizen FD (Resident 60+ yrs, +0.50% to +1.00% Spread)</option>
+          <option value="local resident FD">local resident FD (Domestic General Resident &lt; 60 yrs)</option>
+          <option value="NRO FD">NRO FD (Non-Resident Ordinary Rupee Deposit, 30% TDS)</option>
+          <option value="NRI FD">NRI FD (Non-Resident External NRE Deposit, 100% Tax-Free)</option>
+        </select>
+        <small class="card-subtitle" id="categorySubtext">Governs rate spreads, premature penalty waivers, and DICGC rules.</small>
+      </div>
+
+      <!-- Date of Birth (Enabled conditionally for Senior Citizen) -->
+      <div class="form-group" id="dobFormGroup">
+        <label class="form-label" for="customerDob">Customer Date of Birth (DOB) <span class="req" id="dobReqAsterisk">*</span></label>
+        <input type="date" id="customerDob" class="form-input" value="1962-08-14">
+        <small class="card-subtitle" id="dobSubtext" style="display:block; margin-top: 4px;">Required for Senior Citizen age verification (60+ yrs).</small>
+        <div id="ageIndicator" class="age-indicator-pill">
+          🎂 Age: 64 Years | Eligible for Senior Citizen Benefits
+        </div>
+      </div>
+
+      <!-- Customer Name / Holder Capacity -->
+      <div class="form-group">
+        <label class="form-label" for="customerName">Primary Investor / Holder Name</label>
+        <input type="text" id="customerName" class="form-input" value="" placeholder="e.g. Primary Investor / Holder Name">
+        <small class="card-subtitle">Used for distinct legal capacity tracking (Single vs Joint ₹5L limit).</small>
+      </div>
+    </div>
+
+    <!-- Benchmark Target Rates Preview Bar -->
+    <div id="benchmarkBar" style="margin-top: 14px; padding: 14px 18px; background: #F8FAFC; border-radius: 8px; border: 1.5px solid #CBD5E1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div style="font-size: 14px; font-weight: 800; color: #16325C;">
+        🎯 Top Target RBI Benchmarks for <span id="currentCategoryBadge" style="color: #0D9488;">senior citizen FD</span>:
+      </div>
+      <div id="topBanksPills" style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 700;">
+        <span style="background: #E0F2FE; color: #0369A1; padding: 4px 10px; border-radius: 6px; border: 1px solid #BAE6FD;">Ujjivan SFB: 8.60% (3y 1d)</span>
+        <span style="background: #E0F2FE; color: #0369A1; padding: 4px 10px; border-radius: 6px; border: 1px solid #BAE6FD;">Unity SFB: 8.50% (501d/1001d)</span>
+        <span style="background: #E0F2FE; color: #0369A1; padding: 4px 10px; border-radius: 6px; border: 1px solid #BAE6FD;">Utkarsh SFB: 8.50% (666d)</span>
+        <span style="background: #E0F2FE; color: #0369A1; padding: 4px 10px; border-radius: 6px; border: 1px solid #BAE6FD;">DCB Bank: 8.35% (25m)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DYNAMIC ADAPTED PROMPT & RBI RULES ACCORDION -->
+  <section class="card">
+    <div class="card-header" style="cursor: pointer;" id="promptToggleHeader">
+      <div>
+        <div class="card-title">
+          <span>📋 Dynamic RBI Execution Prompt &amp; Regulatory Framework</span>
+          <span style="font-size: 12.5px; font-weight: 700; background: #DBEAFE; color: #1E40AF; padding: 3px 10px; border-radius: 9999px;">Auto-Adapts to FD Category</span>
+        </div>
+        <div class="card-subtitle">Click to expand/collapse the adapted prompt instructions and RBI 44-bank logic</div>
+      </div>
+      <!-- Show Prompt button removed as requested -->
+    </div>
+
+    <div id="promptContainer" style="display: none; margin-top: 10px;">
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 8px;">
+        <button class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;" id="btnCopyPrompt">📋 Copy Prompt</button>
+        <button class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;" id="btnDownloadPrompt">💾 Download Prompt (.md)</button>
+      </div>
+      <div class="prompt-box" id="dynamicPromptText"></div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO INPUT SECTION (UPLOAD OR CREATE THEN AND THERE) -->
+  <section class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">📁 FD Portfolio Ingestion</div>
+        <div class="card-subtitle">Choose whether to upload your portfolio file or enter/edit FD details directly in the app</div>
+      </div>
+    </div>
+
+    <!-- Ingestion Method Radio Buttons -->
+    <div style="background: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 8px; padding: 12px 18px; margin-bottom: 16px;">
+      <div style="font-weight: 700; color: #1E293B; margin-bottom: 10px; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.5px;">Select Ingestion Method:</div>
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 10pt; font-weight: 600; color: #1E293B; cursor: pointer;">
+          <input type="radio" name="ingestionOption" id="radioOptionUpload" value="upload" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563EB;">
+          <span>📂 Option 1: Upload FD Portfolio (.xlsx / .csv)</span>
+        </label>
+        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 10pt; font-weight: 600; color: #1E293B; cursor: pointer;">
+          <input type="radio" name="ingestionOption" id="radioOptionManual" value="manual" style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563EB;">
+          <span>✍️ Option 2: Direct Entry / Edit Portfolio In-App (Then and There)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- TAB 1: FILE UPLOAD -->
+    <div id="uploadTabContent">
+      <!-- Privacy Reminder Banner -->
+      <div class="privacy-notice-box">
+        <span style="font-size: 14pt; flex-shrink: 0;">🔒</span>
+        <div>
+          <strong>Privacy Notice:</strong> Do not put your actual account number for your privacy. Only the issuing bank name, principal amount, interest rate, START DATE and maturity dates are required. All session data is stored only in local memory and is automatically wiped after each session.
+        </div>
+      </div>
+
+      <!-- Attached File Indicator Card (Shown when file is attached) -->
+      <div id="attachedFileCard" class="attached-card" style="display: none;">
+        <div class="attached-card-left">
+          <div class="attached-file-icon">📊</div>
+          <div class="attached-file-info">
+            <div class="attached-file-name" id="attachedFileName">portfolio.xlsx</div>
+            <div class="attached-file-meta" id="attachedFileMeta">14.6 KB • 67 Holdings Parsed</div>
+            <div class="attached-file-badge" id="attachedFileBadge">✅ Successfully Attached &amp; Validated</div>
+          </div>
+        </div>
+        <div class="attached-card-actions">
+          <button type="button" class="btn btn-outline" id="btnReplaceFile" style="font-size: 13.5px; font-weight: 700;">🔄 Re-attach Different File</button>
+          <button type="button" class="btn btn-danger" id="btnDeleteFile" style="font-size: 13.5px; font-weight: 700; color: #DC2626; border-color: #FCA5A5; background: #FEF2F2;">🗑️ Delete / Remove File</button>
+        </div>
+      </div>
+
+      <!-- Compact Upload / Drop Box with Button (Shown when no file is attached) -->
+      <div class="compact-upload-bar" id="dropZone">
+        <input type="file" id="fileInput" accept=".xlsx, .xls, .csv, .json" style="display: none;">
+        <div class="compact-upload-icon">📁</div>
+        <div class="compact-upload-text">
+          <strong>Drag &amp; drop your FD portfolio file here</strong>, or click Browse to choose (.xlsx, .xls, .csv)
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="compact-upload-btn" id="btnBrowseFile">📂 Browse File</button>
+          <button type="button" class="btn btn-outline" id="btnShowFormatGuide" style="padding: 8px 14px; font-size: 13.5px; font-weight: 700;">ℹ️ Required Format Guide</button>
+        </div>
+      </div>
+
+      <!-- Format Instructions Banner (Collapsible / Toggleable) -->
+      <div id="formatGuideCard" style="display: none; background: #F8FAFC; border: 1.5px solid #93C5FD; border-radius: 8px; padding: 16px 20px; margin-top: 10px; font-size: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-weight: 800; color: #1E40AF; font-size: 15px;">📋 Expected File Format &amp; Column Headers</div>
+          <button type="button" id="btnCloseFormatGuide" style="border: none; background: transparent; font-weight: 700; color: #0F172A; font-size: 14px; cursor: pointer;">✕ Close</button>
+        </div>
+        <p style="color: #0F172A; margin-bottom: 8px; font-weight: 500;">
+          Upload your portfolio as an <strong>Excel file (.xlsx, .xls)</strong> or <strong>CSV file (.csv)</strong> containing the following 8 columns:
+        </p>
+        <div style="background: #FFFFFF; border: 1.5px solid #CBD5E1; border-radius: 6px; padding: 10px 14px; overflow-x: auto; margin-bottom: 12px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left;">
+            <thead>
+              <tr style="background: #F1F5F9; color: #0F172A;">
+                <th style="padding: 8px 10px; border-bottom: 2px solid #CBD5E1; font-weight: 700;">Column Header</th>
+                <th style="padding: 8px 10px; border-bottom: 2px solid #CBD5E1; font-weight: 700;">Required Value</th>
+                <th style="padding: 8px 10px; border-bottom: 2px solid #CBD5E1; font-weight: 700;">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">COMPANY NAME</td><td style="padding: 6px 10px; color: #0F172A;">Bank or Institution Name</td><td style="padding: 6px 10px; color: #334155;">State Bank of India, HDFC, ICICI, Utkarsh SFB</td></tr>
+              <tr style="background: #F8FAFC;"><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">TYPE</td><td style="padding: 6px 10px; color: #0F172A;">Holding Type (DEPOSIT evaluated for optimization)</td><td style="padding: 6px 10px; color: #334155;">DEPOSIT, ACCOUNT, BOND, Locker</td></tr>
+              <tr><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">AMOUNT</td><td style="padding: 6px 10px; color: #0F172A;">Principal amount in Rupees</td><td style="padding: 6px 10px; color: #334155;">500000 or 5,00,000</td></tr>
+              <tr style="background: #F8FAFC;"><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">INT %</td><td style="padding: 6px 10px; color: #0F172A;">Total percentage interest provided by the bank (Calculated directly; no compounding per annum, quarterly, or half-yearly)</td><td style="padding: 6px 10px; color: #334155;">7.50 or 8.20</td></tr>
+              <tr><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">Start Date</td><td style="padding: 6px 10px; color: #0F172A;">Booking or deposit start date</td><td style="padding: 6px 10px; color: #334155;">2025-01-15 or 15/01/2025</td></tr>
+              <tr style="background: #F8FAFC;"><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">MATURITY DATE</td><td style="padding: 6px 10px; color: #0F172A;">Maturity date</td><td style="padding: 6px 10px; color: #334155;">2028-01-15 or 15/01/2028</td></tr>
+              <tr><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">Maturity Status</td><td style="padding: 6px 10px; color: #0F172A;">Current deposit status</td><td style="padding: 6px 10px; color: #334155;">On Going, Matured, Locker</td></tr>
+              <tr style="background: #F8FAFC;"><td style="padding: 6px 10px; font-weight: 700; color: #1E40AF;">Deposit First Name</td><td style="padding: 6px 10px; color: #0F172A;">Holder capacity for DICGC limit checks</td><td style="padding: 6px 10px; color: #334155;">Primary Single, Primary &amp; Spouse Joint</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-weight: 700; color: #0F172A;">Get a ready-made template:</span>
+          <a href="sample_portfolio.xlsx" download="sample_portfolio.xlsx" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;">📥 Download Sample Excel (.xlsx)</a>
+          <a href="blank_template.csv" download="blank_template.csv" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;">📥 Download Blank CSV (.csv)</a>
+        </div>
+      </div>
+
+      <div class="upload-actions-bar">
+        <div style="font-size: 13.5px; font-weight: 600; color: #334155;" id="fileStatusText">
+          Ready to upload. Alternatively, click "Load Attached Sample Portfolio" to test instantly.
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="sample_portfolio.xlsx" download="sample_portfolio.xlsx" class="btn btn-outline" style="font-size: 13.5px; font-weight: 700;">📥 Download Template (.xlsx)</a>
+          <a href="blank_template.csv" download="blank_template.csv" class="btn btn-outline" style="font-size: 13.5px; font-weight: 700;">📥 Download Template (.csv)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: MANUAL ENTRY / EDIT ONLINE -->
+    <div id="manualTabContent" style="display: none;">
+      <!-- Privacy Reminder Banner -->
+      <div class="privacy-notice-box">
+        <span style="font-size: 16pt; flex-shrink: 0;">🔒</span>
+        <div>
+          <strong>Privacy Notice:</strong> Do not put your actual account number for your privacy. Select the bank from the dropdown and specify only the holder name/holding capacity (e.g. Single, Joint) for statutory DICGC caps. Your entries stay in temporary local memory and are automatically wiped after each session.
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div style="font-size: 13.5px; font-weight: 500; color: #334155;">
+          Add or edit Fixed Deposits row-by-row. <em>Note: All calculations are based strictly on the total percentage interest provided by the bank (no compounding per annum, half-yearly, or quarterly).</em>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-outline" style="padding: 8px 14px; font-size: 13.5px; font-weight: 700;" id="btnAddRow">➕ Add New Row</button>
+          <button class="btn btn-outline" style="padding: 8px 14px; font-size: 13.5px; font-weight: 700; color: #DC2626;" id="btnClearRows">🗑️ Clear All</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="manualEntryTable">
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th style="width: 180px;">Company / Bank Name</th>
+              <th style="width: 100px;">Type</th>
+              <th style="width: 120px;">Amount (₹)</th>
+              <th style="width: 80px;">Int %</th>
+              <th style="width: 125px;">Start Date</th>
+              <th style="width: 125px;">Maturity Date</th>
+              <th style="width: 130px;">Holder Name</th>
+              <th style="width: 50px;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="manualTableBody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Live Portfolio Metrics Bar -->
+    <div class="stats-strip" id="portfolioStatsBar">
+      <div class="stat-item">
+        <div class="stat-label">Total Line Items</div>
+        <div class="stat-val" id="statTotalItems">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Callable FDs to Evaluate</div>
+        <div class="stat-val" id="statActiveDeposits">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Total Invested Principal</div>
+        <div class="stat-val" id="statTotalAmount">₹0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Overdue / Matured FDs</div>
+        <div class="stat-val" id="statMaturedItems" style="color: #964215;">0</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMISSION ACTION BUTTON -->
+  <div style="text-align: center; margin: 28px 0;">
+    <button class="btn btn-primary btn-lg" id="btnExecuteOptimization" style="box-shadow: 0 4px 14px rgba(22, 50, 92, 0.35);">
+      🚀 Run FD Optimization Engine & Generate FD Checklist
+    </button>
+  </div>
+
+  <!-- RESULTS & REPORT SECTION -->
+  <section class="results-container" id="resultsSection">
+    
+    <!-- Results Header -->
+    <div class="card" style="border-left: 5px solid var(--accent-green);">
+      <div class="card-header" style="border: none; margin-bottom: 0; padding-bottom: 0;">
+        <div>
+          <div class="card-title" style="font-size: 15pt; color: #16325C;">
+            ✅ Optimization Analysis Complete — Report Generated
+          </div>
+          <div class="card-subtitle" style="font-size: 9.5pt; margin-top: 4px;">
+            The quantitative engine has evaluated all holdings against 44 RBI-scheduled banks, DICGC ₹5 Lakh safety ceilings, and penalty waiver trade-offs.
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <!-- ONLY ONE PDF FILE NAMED FD CHECKLIST -->
+          <button class="btn btn-success btn-lg" id="btnDownloadPdf" style="font-weight: 800;">
+            📥 Download FD Checklist (PDF)
+          </button>
+          <button class="btn btn-outline" id="btnViewPdfModal">
+            👁️ View FD Checklist (PDF)
+          </button>
+          <button class="btn btn-outline" id="btnPrintReport">
+            🖨️ Print
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI Summary Row -->
+    <div class="kpi-row">
+      <div class="kpi-card green">
+        <div class="kpi-title">Net Pre-Tax Gain</div>
+        <div class="kpi-num green" id="kpiNetGain">+₹0</div>
+        <div class="kpi-desc">After deducting all bank exit penalties</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-title">Capital Reallocated</div>
+        <div class="kpi-num" id="kpiCapitalReallocated">₹0</div>
+        <div class="kpi-desc">Deployed into top-yield RBI-safe banks</div>
+      </div>
+      <div class="kpi-card rust">
+        <div class="kpi-title">Matured Deposits Action</div>
+        <div class="kpi-num" id="kpiMaturedCount">0</div>
+        <div class="kpi-desc">Overdue FDs earning idle savings rate</div>
+      </div>
+      <div class="kpi-card burgundy">
+        <div class="kpi-title">Break & Move Switches</div>
+        <div class="kpi-num" id="kpiBreakCount">0</div>
+        <div class="kpi-desc">Passing the ₹1,500 net benefit hurdle</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">DICGC Protection</div>
+        <div class="kpi-num" style="color: #16325C;">100%</div>
+        <div class="kpi-desc">All deposits split below ₹5L ceiling</div>
+      </div>
+    </div>
+
+    <!-- LIVE EXECUTIVE REPORT PREVIEW -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📄 FD Checklist: Executive Action Report Preview</div>
+        <div class="card-subtitle">Publication-grade 2-Page Landscape A4 format prepared for export as 'FD checklist.pdf'</div>
+      </div>
+
+      <!-- Preview container rendering the exact 2-page report -->
+      <div id="reportContainer" style="overflow-x: auto; background: #64748B; padding: 20px; border-radius: var(--radius-sm);">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- MODAL: HIGH-FIDELITY PDF VIEWER -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" style="font-size: 16px; font-weight: 800;">📑 FD Checklist — PDF Preview</div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn btn-success" id="btnModalDownload" style="padding: 8px 16px; font-size: 13.5px; font-weight: 700;">📥 Download FD Checklist (PDF)</button>
+        <button class="btn btn-outline" id="btnModalPrint" style="padding: 8px 16px; font-size: 13.5px; font-weight: 700; color: #FFFFFF; border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.15);">🖨️ Print</button>
+        <button class="btn-close-modal" id="btnModalClose">&times;</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalReportTarget">
+      <!-- Cloned report content rendered here -->
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: UPLOAD FORMAT & REQUIREMENTS -->
+<div class="format-modal-overlay" id="uploadFormatModal" style="display: none;">
+  <div class="format-modal-box">
+    <div class="format-modal-head">
+      <div class="format-modal-title">
+        <span>📋</span>
+        <span>FD Portfolio Upload Format &amp; Column Requirements</span>
+      </div>
+      <button type="button" class="btn-close-modal" id="btnCloseFormatModal" style="color: #FFFFFF; background: transparent; border: none; font-size: 20pt; cursor: pointer;">&times;</button>
+    </div>
+    <div class="format-modal-body">
+      <div style="background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 6px; padding: 12px 16px; margin-bottom: 14px; color: #991B1B; font-size: 13.5px; display: flex; gap: 12px; align-items: center;">
+        <span style="font-size: 18pt; flex-shrink: 0;">🔒</span>
+        <div>
+          <strong>Strict Privacy Notice:</strong> Do not put your actual account number for your privacy. The 8 required columns only require general holding data (Bank, Type, Amount, Interest %, Dates, Status, Holder Capacity). Never include account numbers or sensitive credentials. All session data is wiped after each session.
+        </div>
+      </div>
+
+      <div style="background: #EFF6FF; border: 1.5px solid #93C5FD; border-radius: 6px; padding: 14px 18px; margin-bottom: 14px; color: #1E3A8A; font-size: 14px; line-height: 1.55;">
+        <strong>📌 Important Instructions Before Uploading:</strong><br>
+        Your file must be in <strong>Excel (.xlsx, .xls)</strong> or <strong>CSV (.csv)</strong> format. To ensure accurate optimization against the 44 RBI-scheduled banks and DICGC limits, make sure your file includes the <strong>8 mandatory columns</strong> listed below:
+      </div>
+
+      <table class="format-table">
+        <thead>
+          <tr>
+            <th style="width: 25%;">Column Header Name</th>
+            <th style="width: 35%;">Accepted Values &amp; Description</th>
+            <th style="width: 40%;">Live Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color: #1E40AF;">COMPANY NAME</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Bank or Financial Institution issuing the deposit</td>
+            <td style="color: #334155; font-weight: 500;">State Bank of India, HDFC Bank, ICICI Bank, Utkarsh SFB</td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">TYPE</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Instrument classification (Only <code>DEPOSIT</code> is evaluated)</td>
+            <td style="color: #334155; font-weight: 500;"><code>DEPOSIT</code> (accounts/bonds safely retained)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">AMOUNT</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Principal deposit sum in Indian Rupees (₹)</td>
+            <td style="color: #334155; font-weight: 500;"><code>500000</code> or <code>5,00,000</code> (Numbers)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">INT %</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Total percentage interest rate provided by the bank (Calculated directly; no compounding per annum, quarterly, or half-yearly)</td>
+            <td style="color: #334155; font-weight: 500;"><code>7.50</code>, <code>8.25</code> (Total % rate as given)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">Start Date</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Booking or commencement date</td>
+            <td style="color: #334155; font-weight: 500;"><code>2024-05-15</code> or <code>15/05/2024</code></td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">MATURITY DATE</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Scheduled maturity date of the fixed deposit</td>
+            <td style="color: #334155; font-weight: 500;"><code>2027-05-15</code> or <code>15/05/2027</code></td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">Maturity Status</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Current active status of the deposit</td>
+            <td style="color: #334155; font-weight: 500;"><code>On Going</code>, <code>Live</code>, or <code>Matured</code></td>
+          </tr>
+          <tr>
+            <td><strong style="color: #1E40AF;">Deposit First Name</strong></td>
+            <td style="color: #0F172A; font-weight: 500;">Primary investor / legal holding capacity (DICGC tracking)</td>
+            <td style="color: #334155; font-weight: 500;"><code>Primary Single</code>, <code>Primary &amp; Joint</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-weight: 700; color: #0F172A;">Need a ready-to-use template?</span>
+        <div style="display: flex; gap: 8px;">
+          <a href="sample_portfolio.xlsx" download="sample_portfolio.xlsx" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;">📥 Download Sample Excel (.xlsx)</a>
+          <a href="blank_template.csv" download="blank_template.csv" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px; font-weight: 700;">📥 Download Blank CSV (.csv)</a>
+        </div>
+      </div>
+    </div>
+    <div class="format-modal-footer">
+      <button type="button" class="btn btn-outline" id="btnCancelFormatModal" style="font-size: 13.5px; font-weight: 700;">✕ Cancel</button>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-primary" id="btnModalSelectFile" style="font-size: 14px; font-weight: 700; background: #2563EB;">📂 Proceed &amp; Select File From Computer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MANDATORY STARTUP DISCLAIMER & APP EDUCATION -->
+<div class="disclaimer-modal-overlay" id="disclaimerModal" style="display: flex;">
+  <div class="disclaimer-modal-box">
+    <div class="disclaimer-modal-head">
+      <div class="disclaimer-modal-title">
+        <span style="font-size: 20pt;">🏛️</span>
+        <div>
+          <div style="font-size: 16pt; font-weight: 800; letter-spacing: -0.3px;">FD Optimization Program — Advisory &amp; Overview</div>
+          <div style="font-size: 13px; font-weight: 500; color: #F1F5F9; margin-top: 2px;">Institutional Fixed Deposit Portfolio Engine under RBI &amp; DICGC Guidelines</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="disclaimer-modal-body">
+      <!-- PART 1: APP EDUCATION & WHAT TO EXPECT -->
+      <div class="edu-section-title">📘 What This App Does &amp; What You Can Expect</div>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="edu-card-icon">🔍</div>
+          <div class="edu-card-content">
+            <strong>Portfolio Optimization Scan</strong>
+            <p>Analyzes your active and matured FDs against live rate slabs across all 44 RBI-scheduled banks.</p>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-card-icon">⚖️</div>
+          <div class="edu-card-content">
+            <strong>Penalty vs Yield Math</strong>
+            <p>Factors in premature penalties (0.50%–1.00%) and only recommends breaking an FD if net gain exceeds ₹1,500.</p>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-card-icon">🛡️</div>
+          <div class="edu-card-content">
+            <strong>DICGC ₹5 Lakh Insurance</strong>
+            <p>Verifies bank concentration to ensure your capital stays protected within the ₹5 Lakh statutory deposit insurance ceiling.</p>
+          </div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-card-icon">📑</div>
+          <div class="edu-card-content">
+            <strong>Executive Action Checklist</strong>
+            <p>Generates a 2-page print-ready PDF checklist (<code>FD checklist.pdf</code>) with step-by-step reinvestment instructions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALCULATION BASELINE & INTEREST ASSUMPTION CALLOUT -->
+      <div style="background: #EFF6FF; border: 1.5px solid #93C5FD; border-radius: 8px; padding: 14px 18px; margin-top: 14px; display: flex; gap: 14px; align-items: flex-start;">
+        <span style="font-size: 18pt; line-height: 1; flex-shrink: 0;">📊</span>
+        <div style="font-size: 13.5px; color: #1E3A8A; line-height: 1.55; font-weight: 500;">
+          <strong>Calculation Baseline &amp; Interest Assumptions:</strong> All calculations, models, and comparisons are based strictly on the <strong>total percentage interest provided by the bank</strong>. The engine evaluates this stated percentage directly and does <em>not</em> calculate compounding on a per annum (p.a.), half-yearly, or quarterly compounding schedule.
+        </div>
+      </div>
+
+      <!-- PART 2: MANDATORY LEGAL & EDUCATIONAL DISCLAIMER -->
+      <div class="edu-section-title" style="margin-top: 20px; color: #DC2626;">⚖️ Mandatory Regulatory &amp; Educational Disclaimer</div>
+      <div class="disclaimer-box-legal">
+        <p><strong>Educational Purposes Only:</strong> This app is intended for educational purposes and general guidance only. Its calculations and information may not always be accurate or complete, so please verify all rates, charges, and amounts directly with the relevant bank before making a decision.</p>
+        <p><strong>Interest Calculation Methodology:</strong> All assumptions and calculations are based strictly on the total percentage interest provided by the bank. The tool does not calculate compounding based on per annum, half-yearly, or quarterly compounding schedules.</p>
+        <p><strong>Independent Verification:</strong> If you’re considering breaking or transferring a fixed deposit (FD), take time to review your options and decide what’s right for you. The app’s results should not replace advice from your bank or your own judgment.</p>
+        <p style="background: #F0FDF4; border-left: 3px solid #16A34A; padding: 10px 14px; border-radius: 0 6px 6px 0; color: #166534;"><strong>Privacy &amp; Data Security:</strong> Do not put your actual account number for your privacy. All operations execute strictly in temporary local browser memory, and all session data is automatically wiped after each session upon closing or refreshing the browser.</p>
+        <p class="disclaimer-liability-clause"><strong>Limitation of Liability:</strong> The author is not responsible for any loss resulting from app malfunctions, calculation errors, or decisions made using the app. By using it, you accept responsibility for your actions and any outcomes.</p>
+      </div>
+
+      <!-- PART 3: MANDATORY ACCEPTANCE CHECKBOX -->
+      <div class="disclaimer-acknowledgement">
+        <label class="disclaimer-checkbox-label">
+          <input type="checkbox" id="chkAcknowledgeDisclaimer">
+          <span>I have read what this app does, understand its educational nature, and accept full responsibility for any financial decisions.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="disclaimer-modal-footer">
+      <div style="font-size: 13px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 6px;">
+        <span>🔒</span>
+        <span>100% Private Client-Side Processing • No financial data leaves your browser</span>
+      </div>
+      <button type="button" class="btn btn-primary" id="btnAcceptDisclaimer" disabled style="padding: 12px 26px; font-size: 14.5px; font-weight: 700; opacity: 0.5; cursor: not-allowed; transition: all 0.2s ease;">
+        🔒 Check Box Above to Unlock Application
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="banks_data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

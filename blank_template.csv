@@ -1,0 +1,4 @@
+﻿COMPANY NAME,TYPE,AMOUNT,INT %,Start Date,MATURITY DATE,Maturity Status,Deposit First Name
+State Bank of India,DEPOSIT,500000,7.05,2025-01-15,2028-01-15,On Going,Self
+HDFC Bank,DEPOSIT,250000,7.10,2024-06-10,2027-06-10,On Going,Joint
+ICICI Bank,ACCOUNT,50000,3.00,,,On Going,Self
